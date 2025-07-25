@@ -16,6 +16,13 @@ import { Input } from "./ui/input";
 import { Badge } from "./ui/badge";
 import { Switch } from "./ui/switch";
 import { Label } from "./ui/label";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "./ui/sheet";
 import MenuDisplay from "./menu/MenuDisplay";
 import OrderCart from "./order/OrderCart";
 import InventoryManagement from "./inventory/InventoryManagement";
@@ -39,6 +46,7 @@ const Home = () => {
     }>
   >([]);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -107,9 +115,99 @@ const Home = () => {
       <header className="sticky top-0 z-10 bg-background border-b shadow-sm">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="md:hidden">
-              <MenuIcon className="h-6 w-6" />
-            </Button>
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="md:hidden">
+                  <MenuIcon className="h-6 w-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+                <SheetHeader>
+                  <SheetTitle>Navigation</SheetTitle>
+                </SheetHeader>
+                <div className="flex flex-col space-y-4 mt-6">
+                  <Button
+                    variant={activeView === "menu" ? "default" : "ghost"}
+                    className="justify-start text-base font-medium"
+                    onClick={() => {
+                      setActiveView("menu");
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    Menu
+                  </Button>
+                  <Button
+                    variant={activeView === "inventory" ? "default" : "ghost"}
+                    className="justify-start text-base font-medium"
+                    onClick={() => {
+                      setActiveView("inventory");
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <Package className="h-4 w-4 mr-2" />
+                    Inventory
+                  </Button>
+                  <Button
+                    variant={activeView === "employees" ? "default" : "ghost"}
+                    className="justify-start text-base font-medium"
+                    onClick={() => {
+                      setActiveView("employees");
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <Users className="h-4 w-4 mr-2" />
+                    Employees
+                  </Button>
+                  <Button
+                    variant={activeView === "reporting" ? "default" : "ghost"}
+                    className="justify-start text-base font-medium"
+                    onClick={() => {
+                      setActiveView("reporting");
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <BarChart3 className="h-4 w-4 mr-2" />
+                    Reports
+                  </Button>
+                  <Button
+                    variant={activeView === "crm" ? "default" : "ghost"}
+                    className="justify-start text-base font-medium"
+                    onClick={() => {
+                      setActiveView("crm");
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    <Users className="h-4 w-4 mr-2" />
+                    CRM
+                  </Button>
+
+                  {/* Mobile Search */}
+                  <div className="relative mt-6">
+                    <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input placeholder="Search menu..." className="pl-8" />
+                  </div>
+
+                  {/* Mobile Dark Mode Toggle */}
+                  <div className="flex items-center justify-between mt-6 p-2">
+                    <Label
+                      htmlFor="mobile-dark-mode"
+                      className="text-sm font-medium"
+                    >
+                      Dark Mode
+                    </Label>
+                    <div className="flex items-center gap-2">
+                      <Sun className="h-4 w-4 text-muted-foreground" />
+                      <Switch
+                        id="mobile-dark-mode"
+                        checked={isDarkMode}
+                        onCheckedChange={toggleDarkMode}
+                      />
+                      <Moon className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
